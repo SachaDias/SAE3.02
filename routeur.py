@@ -16,19 +16,23 @@ def get_key_for_me(port):
 def xor_layer(data, key):
     return bytes([b ^ key[i % len(key)] for i, b in enumerate(data)])
 
-def handle_conn(conn, key, next_addr, next_port):
+def handle_conn(conn, key, next_addr, next_port, name):
     data = conn.recv(4096)
+    print(f"\n--- Routeur {name} sur port {port} ---")
+    print(f"Reçu (chiffré) : {data.hex()[:64]}...")
     dec = xor_layer(data, key)
-    dest, payload = dec[:21], dec[21:]
+    addr_info, payload = dec[:21], dec[21:]
+    print(f"Déchiffré -> Adresse suivante : {addr_info.decode(errors='replace').strip()}")
+    print(f"Déchiffré -> Début du payload : {payload[:40].decode(errors='replace')}...")
     if next_addr == '' and next_port == 0:
-        print("Message reçu:", payload.decode())
+        print(f"\n>>> MESSAGE FINAL arrivé à {name} : {payload.decode(errors='replace')}\n")
     else:
         with socket.socket() as ns:
             ns.connect((next_addr, next_port))
             ns.send(payload)
     conn.close()
 
-def main(port, next_addr, next_port):
+def main(port, next_addr, next_port, name):
     key = get_key_for_me(port)
     if not key:
         print(f"Aucune clef trouvée pour le port {port}")
@@ -36,13 +40,14 @@ def main(port, next_addr, next_port):
     s = socket.socket()
     s.bind(("localhost", port))
     s.listen()
-    print(f"Routeur sur {port}")
+    print(f"Routeur {name} prêt sur {port}")
     while True:
         conn, _ = s.accept()
-        threading.Thread(target=handle_conn, args=(conn, key, next_addr, next_port)).start()
+        threading.Thread(target=handle_conn, args=(conn, key, next_addr, next_port, name)).start()
 
 if __name__ == "__main__":
     port = int(sys.argv[1])
     next_addr = sys.argv[2]
     next_port = int(sys.argv[3])
-    main(port, next_addr, next_port)
+    name = sys.argv[4] if len(sys.argv) > 4 else f"R_{port}"
+    main(port, next_addr, next_port, name)
