@@ -3,7 +3,7 @@ import threading
 import sys
 import mysql.connector
 
-DB_CFG = dict(user='root', password='tonmotdepasse', host='localhost', database='sae3')
+DB_CFG = dict(user='root', password='18042005', host='localhost', database='sae3')
 
 def get_key_for_me(port):
     conn = mysql.connector.connect(**DB_CFG)

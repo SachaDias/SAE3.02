@@ -3,7 +3,7 @@ import threading
 import pickle
 import mysql.connector
 
-DB_CFG = dict(user='root', password='tonmotdepasse', host='localhost', database='sae3')
+DB_CFG = dict(user='root', password='18042005', host='localhost', database='sae3')
 
 def get_routeurs_and_keys():
     conn = mysql.connector.connect(**DB_CFG)
