@@ -4,27 +4,42 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7ccd84b0-aa42-43cc-8bd3-03cb6d2bde40" name="Changes" comment="Création du répertoire">
+    <list default="true" id="7ccd84b0-aa42-43cc-8bd3-03cb6d2bde40" name="Changes" comment="ajout du mot de passe pour correctement relier à mariadb">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/client.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/master.py" beforeDir="false" afterPath="$PROJECT_DIR$/master.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="SET_USER_NAME_GLOBALLY" value="false" />
   </component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/SachaDias/SAE3.02.git",
-    "accountId": "e36bc729-68e7-46ed-bc92-87526194e231"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;SachaDias&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 6
-}]]></component>
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/SachaDias/SAE3.02.git&quot;,
+    &quot;accountId&quot;: &quot;e36bc729-68e7-46ed-bc92-87526194e231&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="35HxSci2fB6gPGESdtr0yh2SSQB" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -34,6 +49,7 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
     "junie.onboarding.icon.badge.shown": "true",
@@ -80,11 +96,80 @@
       <option name="project" value="LOCAL" />
       <updated>1762781283647</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Création du répertoire">
+      <option name="closed" value="true" />
+      <created>1762782016795</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1762782016795</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Création du répertoire">
+      <option name="closed" value="true" />
+      <created>1762782123096</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1762782123096</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Création du répertoire">
+      <option name="closed" value="true" />
+      <created>1762782162178</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1762782162178</updated>
+    </task>
+    <task id="LOCAL-00007" summary="ajout du code dit master">
+      <option name="closed" value="true" />
+      <created>1763972363544</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1763972363544</updated>
+    </task>
+    <task id="LOCAL-00008" summary="création du code client">
+      <option name="closed" value="true" />
+      <created>1763972483638</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1763972483638</updated>
+    </task>
+    <task id="LOCAL-00009" summary="grosse update codes masters, client et routeur afin d'ajouter les connexions par socket">
+      <option name="closed" value="true" />
+      <created>1763972946785</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1763972946785</updated>
+    </task>
+    <task id="LOCAL-00010" summary="ajout de la connexion avec mariad db dans les codes(mysql connextor)">
+      <option name="closed" value="true" />
+      <created>1763973555506</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1763973555506</updated>
+    </task>
+    <task id="LOCAL-00011" summary="ajout du mot de passe pour correctement relier à mariadb">
+      <option name="closed" value="true" />
+      <created>1763973656100</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1763973656100</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Création du répertoire" />
-    <option name="LAST_COMMIT_MESSAGE" value="Création du répertoire" />
+    <MESSAGE value="ajout du code dit master" />
+    <MESSAGE value="création du code client" />
+    <MESSAGE value="grosse update codes masters, client et routeur afin d'ajouter les connexions par socket" />
+    <MESSAGE value="ajout de la connexion avec mariad db dans les codes(mysql connextor)" />
+    <MESSAGE value="ajout du mot de passe pour correctement relier à mariadb" />
+    <option name="LAST_COMMIT_MESSAGE" value="ajout du mot de passe pour correctement relier à mariadb" />
   </component>
 </project>

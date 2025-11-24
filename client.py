@@ -3,7 +3,7 @@ import pickle
 
 def get_route_from_master():
     with socket.socket() as s:
-        s.connect(("localhost", 5000))
+        s.connect(("localhost", 5100))
         data = s.recv(4096)
         info = pickle.loads(data)
         return info["route"], info["keys"]

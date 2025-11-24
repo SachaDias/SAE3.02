@@ -20,9 +20,9 @@ def client_handler(conn):
 
 def master_server():
     s = socket.socket()
-    s.bind(("localhost", 5000))
+    s.bind(("localhost", 5100))
     s.listen()
-    print("Master prêt sur 5000")
+    print("Master prêt sur 5100")
     while True:
         conn, _ = s.accept()
         threading.Thread(target=client_handler, args=(conn,)).start()
