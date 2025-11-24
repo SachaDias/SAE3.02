@@ -1,6 +1,17 @@
 import socket
 import threading
 import sys
+import mysql.connector
+
+DB_CFG = dict(user='root', password='tonmotdepasse', host='localhost', database='sae3')
+
+def get_key_for_me(port):
+    conn = mysql.connector.connect(**DB_CFG)
+    cursor = conn.cursor()
+    cursor.execute("SELECT clef FROM routeurs WHERE port=%s", (port,))
+    res = cursor.fetchone()
+    conn.close()
+    return res[0] if res else None
 
 def xor_layer(data, key):
     return bytes([b ^ key[i % len(key)] for i, b in enumerate(data)])
@@ -8,7 +19,7 @@ def xor_layer(data, key):
 def handle_conn(conn, key, next_addr, next_port):
     data = conn.recv(4096)
     dec = xor_layer(data, key)
-    dest, payload = dec[:21], dec[21:]  # 21 octets pour adresse
+    dest, payload = dec[:21], dec[21:]
     if next_addr == '' and next_port == 0:
         print("Message reçu:", payload.decode())
     else:
@@ -17,7 +28,11 @@ def handle_conn(conn, key, next_addr, next_port):
             ns.send(payload)
     conn.close()
 
-def main(port, key, next_addr, next_port):
+def main(port, next_addr, next_port):
+    key = get_key_for_me(port)
+    if not key:
+        print(f"Aucune clef trouvée pour le port {port}")
+        return
     s = socket.socket()
     s.bind(("localhost", port))
     s.listen()
@@ -28,7 +43,6 @@ def main(port, key, next_addr, next_port):
 
 if __name__ == "__main__":
     port = int(sys.argv[1])
-    key = sys.argv[2].encode()
-    next_addr = sys.argv[3]
-    next_port = int(sys.argv[4])
-    main(port, key, next_addr, next_port)
+    next_addr = sys.argv[2]
+    next_port = int(sys.argv[3])
+    main(port, next_addr, next_port)

@@ -1,12 +1,21 @@
 import socket
 import threading
 import pickle
+import mysql.connector
 
-ROUTERS = [("localhost", 5001), ("localhost", 5002), ("localhost", 5003)]
-ROUTER_KEYS = [b'clef1', b'clef2', b'clef3']
+DB_CFG = dict(user='root', password='tonmotdepasse', host='localhost', database='sae3')
+
+def get_routeurs_and_keys():
+    conn = mysql.connector.connect(**DB_CFG)
+    cursor = conn.cursor()
+    cursor.execute("SELECT ip, port, clef FROM routeurs ORDER BY id")
+    data = cursor.fetchall()
+    conn.close()
+    return [ (ip, int(port)) for ip, port, _ in data ], [ clef for _, _, clef in data ]
 
 def client_handler(conn):
-    conn.send(pickle.dumps({"route": ROUTERS, "keys": ROUTER_KEYS}))
+    routers, keys = get_routeurs_and_keys()
+    conn.send(pickle.dumps({"route": routers, "keys": keys}))
     conn.close()
 
 def master_server():

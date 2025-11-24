@@ -1,7 +1,13 @@
 import socket
+import pickle
 
-ROUTERS = [("localhost", 5001), ("localhost", 5002), ("localhost", 5003)]
-ROUTER_KEYS = [b'clef1', b'clef2', b'clef3']
+def get_route_from_master():
+    with socket.socket() as s:
+        s.connect(("localhost", 5000))
+        data = s.recv(4096)
+        info = pickle.loads(data)
+        return info["route"], info["keys"]
+
 ADDR_LEN = 21
 
 def xor_layer(data, key):
@@ -14,10 +20,11 @@ def build_onion(msg, routeurs, keys):
     return l
 
 def main():
+    routeurs, keys = get_route_from_master()
     msg = input("Message à envoyer : ")
-    payload = build_onion(msg, ROUTERS, ROUTER_KEYS)
+    payload = build_onion(msg, routeurs, keys)
     with socket.socket() as s:
-        s.connect(ROUTERS[0])
+        s.connect(routeurs[0])
         s.send(payload)
 
 if __name__ == "__main__":
