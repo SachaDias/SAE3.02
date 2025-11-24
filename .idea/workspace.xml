@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7ccd84b0-aa42-43cc-8bd3-03cb6d2bde40" name="Changes" comment="ajout du mot de passe pour correctement relier à mariadb">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/master.py" beforeDir="false" afterPath="$PROJECT_DIR$/master.py" afterDir="false" />
+    <list default="true" id="7ccd84b0-aa42-43cc-8bd3-03cb6d2bde40" name="Changes" comment="Ajout d'un affichage afin d'afficher que le message passe bien dans chaque routeur">
+      <change afterPath="$PROJECT_DIR$/client_gui.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/master_gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -160,7 +159,31 @@
       <option name="project" value="LOCAL" />
       <updated>1763973656100</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Changement des ports 5000 occupé">
+      <option name="closed" value="true" />
+      <created>1763974170817</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1763974170817</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Update pour utiliser le super user créer dans la bdd">
+      <option name="closed" value="true" />
+      <created>1763974539527</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1763974539527</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Ajout d'un affichage afin d'afficher que le message passe bien dans chaque routeur">
+      <option name="closed" value="true" />
+      <created>1763975027877</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1763975027877</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -170,6 +193,9 @@
     <MESSAGE value="grosse update codes masters, client et routeur afin d'ajouter les connexions par socket" />
     <MESSAGE value="ajout de la connexion avec mariad db dans les codes(mysql connextor)" />
     <MESSAGE value="ajout du mot de passe pour correctement relier à mariadb" />
-    <option name="LAST_COMMIT_MESSAGE" value="ajout du mot de passe pour correctement relier à mariadb" />
+    <MESSAGE value="Changement des ports 5000 occupé" />
+    <MESSAGE value="Update pour utiliser le super user créer dans la bdd" />
+    <MESSAGE value="Ajout d'un affichage afin d'afficher que le message passe bien dans chaque routeur" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajout d'un affichage afin d'afficher que le message passe bien dans chaque routeur" />
   </component>
 </project>
