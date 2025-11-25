@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7ccd84b0-aa42-43cc-8bd3-03cb6d2bde40" name="Changes" comment="Ajout d'un affichage afin d'afficher que le message passe bien dans chaque routeur">
-      <change afterPath="$PROJECT_DIR$/client_gui.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/master_gui.py" afterDir="false" />
+    <list default="true" id="7ccd84b0-aa42-43cc-8bd3-03cb6d2bde40" name="Changes" comment="AJout des fichier clietn master_gui qui ont le même role que les scripts classique mais aevc interfaces.">
+      <change afterPath="$PROJECT_DIR$/scriptbdd.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,7 +182,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763975027877</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="AJout des fichier clietn master_gui qui ont le même role que les scripts classique mais aevc interfaces.">
+      <option name="closed" value="true" />
+      <created>1763977288735</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1763977288735</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -196,6 +203,7 @@
     <MESSAGE value="Changement des ports 5000 occupé" />
     <MESSAGE value="Update pour utiliser le super user créer dans la bdd" />
     <MESSAGE value="Ajout d'un affichage afin d'afficher que le message passe bien dans chaque routeur" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ajout d'un affichage afin d'afficher que le message passe bien dans chaque routeur" />
+    <MESSAGE value="AJout des fichier clietn master_gui qui ont le même role que les scripts classique mais aevc interfaces." />
+    <option name="LAST_COMMIT_MESSAGE" value="AJout des fichier clietn master_gui qui ont le même role que les scripts classique mais aevc interfaces." />
   </component>
 </project>
