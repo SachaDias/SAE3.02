@@ -1,28 +1,41 @@
+import tkinter as tk
+from tkinter import simpledialog, messagebox
 import mysql.connector
 
-# À ADAPTER SELON TON ENVIRONNEMENT
 DB_CFG = dict(user='saeuser', password='unmotdepassefiable', host='localhost', database='sae3')
 
-# Exemple de configuration : 3 routeurs (tu peux modifier ici)
-routeurs = [
-    {'nom': 'R1', 'ip': 'localhost', 'port': 5101, 'clef': 'clef1'},
-    {'nom': 'R2', 'ip': 'localhost', 'port': 5103, 'clef': 'clef2'},
-    {'nom': 'R3', 'ip': 'localhost', 'port': 5105, 'clef': 'clef3'},
-]
-
-def reset_routeurs_table():
+def reset_routeurs_table(routeurs):
     conn = mysql.connector.connect(**DB_CFG)
     cursor = conn.cursor()
     cursor.execute("DELETE FROM routeurs;")
     for r in routeurs:
         cursor.execute(
             "INSERT INTO routeurs (nom, ip, port, clef) VALUES (%s, %s, %s, %s)",
-            (r['nom'], r['ip'], r['port'], r['clef'])
+            (r['nom'], 'localhost', r['port'], r['clef'])
         )
     conn.commit()
     cursor.close()
     conn.close()
-    print(f"Table routeurs mise à jour ({len(routeurs)} entrées).")
+
+def ask_routeurs():
+    nb = simpledialog.askinteger("Nombre", "Nombre de routeurs ?", minvalue=1, maxvalue=10)
+    if not nb:
+        return
+    routeurs = []
+    for i in range(nb):
+        nom = simpledialog.askstring("Routeur", f"Nom du routeur {i+1} :")
+        port = simpledialog.askinteger("Port", f"Port pour {nom} :", minvalue=1024, maxvalue=65535)
+        clef = simpledialog.askstring("Clé", f"Clé pour {nom} :")
+        if nom and port and clef:
+            routeurs.append({'nom': nom, 'port': port, 'clef': clef})
+        else:
+            messagebox.showerror("Erreur", "Tous les champs sont obligatoires.")
+            return
+    reset_routeurs_table(routeurs)
+    messagebox.showinfo("Succès", f"{len(routeurs)} routeurs insérés dans la BDD.")
 
 if __name__ == "__main__":
-    reset_routeurs_table()
+    root = tk.Tk()
+    root.withdraw()  # fenêtre principale cachée, on utilise que les dialogs
+    ask_routeurs()
+    root.quit()
