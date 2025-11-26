@@ -11,6 +11,7 @@ DB_CFG = dict(
 )
 
 MASTER_ADDR = ("localhost", 5100)
+ADDR_LEN = 21  # longueur fixe pour "ip:port" dans le message
 
 def get_key_for_me(port):
     conn = mysql.connector.connect(**DB_CFG)
@@ -19,10 +20,13 @@ def get_key_for_me(port):
     res = cursor.fetchone()
     cursor.close()
     conn.close()
-    return res[0] if res else None  # clef stockée en texte
+    return res[0] if res else None  # clef texte ou bytes selon ta BDD
 
 def xor_layer(data, key):
-    key_b = key.encode()  # on convertit la clef texte en bytes
+    if isinstance(key, str):
+        key_b = key.encode()
+    else:
+        key_b = key
     return bytes([b ^ key_b[i % len(key_b)] for i, b in enumerate(data)])
 
 def register_router(name, port, clef):
@@ -36,7 +40,7 @@ def register_router(name, port, clef):
     except Exception as e:
         print(f"[{name}] ERREUR enregistrement master: {e}")
 
-def handle_conn(conn, key, next_addr, next_port, name, my_port):
+def handle_conn(conn, key, name, my_port):
     data = conn.recv(4096)
     if not data:
         conn.close()
@@ -47,16 +51,17 @@ def handle_conn(conn, key, next_addr, next_port, name, my_port):
 
     dec = xor_layer(data, key)
 
-    if next_port != 0:
-        print(f"Déchiffré -> on relaie vers {next_addr}:{next_port}")
-        with socket.socket() as ns:
-            ns.connect((next_addr, next_port))
-            ns.sendall(dec)
-    else:
-        # Dernier routeur : on attend "PORT_DEST:MESSAGE"
+    # On sépare adresse suivante (21 octets) et payload
+    addr_bytes, payload = dec[:ADDR_LEN], dec[ADDR_LEN:]
+    addr_str = addr_bytes.decode(errors="replace").strip()
+    print(f"Déchiffré -> Adresse suivante brute : '{addr_str}'")
+
+    # Si adresse spéciale 0.0.0.0:0000 => dernier routeur
+    if addr_str == "0.0.0.0:0000":
         try:
-            text = dec.decode(errors='replace')
-            print(f"Données décodées au dernier routeur : {text}")
+            # Au centre : "PORT_CLIENT:message"
+            text = payload.decode(errors="replace")
+            print(f"Données centre (dernier routeur) : {text}")
             port_str, msg = text.split(":", 1)
             dest_port = int(port_str)
             with socket.socket() as s:
@@ -65,11 +70,23 @@ def handle_conn(conn, key, next_addr, next_port, name, my_port):
             print(f">>> MESSAGE FINAL livré à {dest_port}")
         except Exception as e:
             print("Erreur de décodage au dernier routeur :", e)
-            print("Données brutes :", dec)
+            print("Données brutes payload :", payload)
+    else:
+        # Sinon, on parse ip:port et on relaie
+        try:
+            ip, port_str = addr_str.split(":", 1)
+            next_port = int(port_str)
+            print(f"On relaie vers {ip}:{next_port}")
+            with socket.socket() as ns:
+                ns.connect((ip, next_port))
+                ns.sendall(payload)
+        except Exception as e:
+            print("Erreur parsing adresse suivante :", e)
+            print("Adresse brute :", addr_str)
 
     conn.close()
 
-def main(port, next_addr, next_port, name):
+def main(port, name):
     key = get_key_for_me(port)
     if not key:
         print(f"Aucune clef trouvée pour le port {port} dans la table routeurs")
@@ -88,13 +105,11 @@ def main(port, next_addr, next_port, name):
         conn, _ = s.accept()
         threading.Thread(
             target=handle_conn,
-            args=(conn, key, next_addr, next_port, name, port),
+            args=(conn, key, name, port),
             daemon=True
         ).start()
 
 if __name__ == "__main__":
     port = int(sys.argv[1])
-    next_addr = sys.argv[2]
-    next_port = int(sys.argv[3])
-    name = sys.argv[4] if len(sys.argv) > 4 else f"R_{port}"
-    main(port, next_addr, next_port, name)
+    name = sys.argv[2] if len(sys.argv) > 2 else f"R_{port}"
+    main(port, name)

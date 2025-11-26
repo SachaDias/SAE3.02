@@ -7,9 +7,13 @@ from PyQt5.QtWidgets import (
 )
 
 MASTER_ADDR = ("localhost", 5100)
+ADDR_LEN = 21  # "ip:port" sur 21 octets
 
 def xor_layer(data, key_str):
-    key = key_str.encode()
+    if isinstance(key_str, bytes):
+        key = key_str
+    else:
+        key = key_str.encode()
     return bytes([b ^ key[i % len(key)] for i, b in enumerate(data)])
 
 class ClientGUI(QWidget):
@@ -17,10 +21,10 @@ class ClientGUI(QWidget):
         super().__init__()
         self.local_port = local_port
         self.local_name = local_name
-        self.routers_dispos = []  # liste (nom, ip, port, clef)
+        self.routers_dispos = []  # (nom, ip, port, clef)
 
         self.setWindowTitle(f"{local_name} (port {local_port})")
-        self.resize(500, 400)
+        self.resize(550, 450)
         layout = QVBoxLayout()
 
         self.info_label = QLabel(f"Client {local_name} sur port {local_port}")
@@ -56,7 +60,7 @@ class ClientGUI(QWidget):
         # Enregistrement au master
         self.register_client()
 
-        # Thread d'écoute pour recevoir les messages finaux
+        # Thread d'écoute
         threading.Thread(target=self.listen, daemon=True).start()
 
     def register_client(self):
@@ -109,8 +113,7 @@ class ClientGUI(QWidget):
             self.history.append(f"Erreur ASK_ROUTERS : {e}")
 
     def build_onion(self, dest_port, msg, route_names):
-        # route_names est une liste de noms: ["R1","R2","R3"]
-        # on récupère la liste (ip,port,clef) correspondante dans l'ordre
+        # route_names : ["R1","R3","R2"] par exemple
         route = []
         for name in route_names:
             name = name.strip()
@@ -123,11 +126,43 @@ class ClientGUI(QWidget):
                 raise ValueError(f"Routeur {name} introuvable dans la liste des routeurs disponibles")
             route.append(found)
 
-        # On part de "PORT_DEST:MESSAGE"
-        layer = f"{dest_port}:{msg}".encode()
-        # On chiffre en partant du dernier routeur choisi
-        for ip, port, clef in reversed(route):
-            layer = xor_layer(layer, clef)
+        # Centre : "PORT_CLIENT_DEST:message"
+        inner = f"{dest_port}:{msg}".encode()
+
+        # Adresse spéciale pour fin de chaîne
+        final_addr = "0.0.0.0:0000".ljust(ADDR_LEN).encode()
+
+        layer = inner
+        # On construit l'oignon de l'intérieur vers l'extérieur
+        # Pour le dernier routeur de la route, l'adresse suivante est 0.0.0.0:0000
+        for idx, (ip, port, clef) in enumerate(reversed(route)):
+            if idx == 0:
+                addr_bytes = final_addr
+            else:
+                # Adresse du routeur précédemment dans la route (en sens normal)
+                # Mais plus simple : pour chaque couche, on encode l'adresse
+                # du "next hop" qui est dans route dans le sens avant reverse.
+                # Comme on travaille en reverse, on prend la route dans le bon sens avant.
+                # Pour rester simple : on reconstruit l'adresse suivante à partir de route normal.
+                pass
+
+        # Version plus simple : on parcourt la route dans l'ordre normal,
+        # en construisant layer à l'envers, avec "ip:port" du prochain.
+        layer = inner
+        for i in reversed(range(len(route))):
+            if i == len(route) - 1:
+                next_ip, next_port = "0.0.0.0", 0
+            else:
+                next_ip, next_port, _ = route[i + 1]
+            ip, port, clef = route[i]
+            if next_port == 0:
+                addr_str = "0.0.0.0:0000"
+            else:
+                addr_str = f"{next_ip}:{next_port}"
+            addr_bytes = addr_str.ljust(ADDR_LEN).encode()
+            layer = xor_layer(addr_bytes + layer, clef)
+
+        # On renvoie le paquet et la route complète
         return layer, route
 
     def send_message(self):
@@ -152,7 +187,7 @@ class ClientGUI(QWidget):
             self.history.append(f"Erreur construction oignon : {e}")
             return
 
-        # Envoi au premier routeur de la route
+        # Premier routeur de la route choisie (route dans l'ordre normal)
         first_ip, first_port, _ = route[0]
         try:
             with socket.socket() as s:
