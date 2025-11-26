@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7ccd84b0-aa42-43cc-8bd3-03cb6d2bde40" name="Changes" comment="AJout d'une interface au script de modification de la bdd afin de facilité son utilisation">
+    <list default="true" id="7ccd84b0-aa42-43cc-8bd3-03cb6d2bde40" name="Changes" comment="Changement route key">
       <change beforePath="$PROJECT_DIR$/client_gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/client_gui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/master_gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/master_gui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routeur.py" beforeDir="false" afterPath="$PROJECT_DIR$/routeur.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -207,7 +209,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764076619667</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Changement route key">
+      <option name="closed" value="true" />
+      <created>1764143367707</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1764143367707</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -223,6 +233,7 @@
     <MESSAGE value="AJout des fichier clietn master_gui qui ont le même role que les scripts classique mais aevc interfaces." />
     <MESSAGE value="AJout d'un script permettant de configuré rapidement le nombre de routeur et leurs port dans la bdd" />
     <MESSAGE value="AJout d'une interface au script de modification de la bdd afin de facilité son utilisation" />
-    <option name="LAST_COMMIT_MESSAGE" value="AJout d'une interface au script de modification de la bdd afin de facilité son utilisation" />
+    <MESSAGE value="Changement route key" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changement route key" />
   </component>
 </project>
