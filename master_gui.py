@@ -11,11 +11,11 @@ DB_CFG = dict(
 
 def db_execute(query, params=(), fetch=False):
     conn = mysql.connector.connect(**DB_CFG)
-    cursor = conn.cursor()
-    cursor.execute(query, params)
-    rows = cursor.fetchall() if fetch else None
+    cur = conn.cursor()
+    cur.execute(query, params)
+    rows = cur.fetchall() if fetch else None
     conn.commit()
-    cursor.close()
+    cur.close()
     conn.close()
     return rows
 
@@ -50,34 +50,25 @@ def handle_register_client(parts):
     return "OK|CLIENT_REGISTERED"
 
 def handle_ask_routers():
-    # On lit dans la table routeurs pour récupérer les clés officielles
-    rows = db_execute(
-        "SELECT nom, ip, port, clef FROM routeurs ORDER BY id",
-        fetch=True
-    )
+    rows = db_execute("SELECT nom, ip, port, clef FROM routeurs ORDER BY id", fetch=True)
     lines = ["ROUTERS"]
     for nom, ip, port, clef in rows:
         lines.append(f"{nom};{ip};{port};{clef}")
     lines.append("END")
     return "\n".join(lines)
 
-
 def handle_ask_clients():
-    rows = db_execute(
-        "SELECT nom, port FROM clients_dyn ORDER BY id",
-        fetch=True
-    )
+    rows = db_execute("SELECT nom, port FROM clients_dyn ORDER BY id", fetch=True)
     lines = ["CLIENTS"]
     for nom, port in rows:
         lines.append(f"{nom};{port}")
     lines.append("END")
     return "\n".join(lines)
 
-def client_handler(conn, addr):
+def client_handler(conn):
     try:
         data = conn.recv(4096)
         if not data:
-            conn.close()
             return
         text = data.decode(errors="replace").strip()
         parts = text.split("|")
@@ -95,11 +86,6 @@ def client_handler(conn, addr):
             resp = "ERR|UNKNOWN_CMD"
 
         conn.sendall(resp.encode())
-    except Exception as e:
-        try:
-            conn.sendall(f"ERR|EXCEPTION|{e}".encode())
-        except Exception:
-            pass
     finally:
         conn.close()
 
@@ -110,8 +96,8 @@ def main():
     s.listen(5)
     print("Master prêt sur 5100")
     while True:
-        conn, addr = s.accept()
-        threading.Thread(target=client_handler, args=(conn, addr), daemon=True).start()
+        conn, _ = s.accept()
+        threading.Thread(target=client_handler, args=(conn,), daemon=True).start()
 
 if __name__ == "__main__":
     main()
