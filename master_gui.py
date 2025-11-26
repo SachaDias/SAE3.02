@@ -50,8 +50,9 @@ def handle_register_client(parts):
     return "OK|CLIENT_REGISTERED"
 
 def handle_ask_routers():
+    # On lit dans la table routeurs pour récupérer les clés officielles
     rows = db_execute(
-        "SELECT nom, ip, port, clef FROM routeurs_dyn ORDER BY id",
+        "SELECT nom, ip, port, clef FROM routeurs ORDER BY id",
         fetch=True
     )
     lines = ["ROUTERS"]
@@ -59,6 +60,7 @@ def handle_ask_routers():
         lines.append(f"{nom};{ip};{port};{clef}")
     lines.append("END")
     return "\n".join(lines)
+
 
 def handle_ask_clients():
     rows = db_execute(

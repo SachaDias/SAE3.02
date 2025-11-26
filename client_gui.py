@@ -105,6 +105,10 @@ class ClientGUI(QWidget):
                         break
                     nom, ip, port_str, clef = line.split(";")
                     port = int(port_str)
+                    # Normaliser la clé: enlever le préfixe b'...' si présent
+                    clef = clef.strip()
+                    if clef.startswith("b'") and clef.endswith("'"):
+                        clef = clef[2:-1]
                     self.routers_dispos.append((nom, ip, port, clef))
             self.history.append("Routeurs disponibles :")
             for r in self.routers_dispos:
@@ -129,37 +133,20 @@ class ClientGUI(QWidget):
         # Centre : "PORT_CLIENT_DEST:message"
         inner = f"{dest_port}:{msg}".encode()
 
-        # Adresse spéciale pour fin de chaîne
-        final_addr = "0.0.0.0:0000".ljust(ADDR_LEN).encode()
-
+        # Construction de l'oignon
         layer = inner
-        # On construit l'oignon de l'intérieur vers l'extérieur
-        # Pour le dernier routeur de la route, l'adresse suivante est 0.0.0.0:0000
-        for idx, (ip, port, clef) in enumerate(reversed(route)):
-            if idx == 0:
-                addr_bytes = final_addr
-            else:
-                # Adresse du routeur précédemment dans la route (en sens normal)
-                # Mais plus simple : pour chaque couche, on encode l'adresse
-                # du "next hop" qui est dans route dans le sens avant reverse.
-                # Comme on travaille en reverse, on prend la route dans le bon sens avant.
-                # Pour rester simple : on reconstruit l'adresse suivante à partir de route normal.
-                pass
-
-        # Version plus simple : on parcourt la route dans l'ordre normal,
-        # en construisant layer à l'envers, avec "ip:port" du prochain.
-        layer = inner
+        # On parcourt la route de la fin vers le début
         for i in reversed(range(len(route))):
-            if i == len(route) - 1:
-                next_ip, next_port = "0.0.0.0", 0
-            else:
-                next_ip, next_port, _ = route[i + 1]
             ip, port, clef = route[i]
-            if next_port == 0:
+            # Déterminer le prochain saut après CE routeur
+            if i == len(route) - 1:
+                # dernier de la chaîne : fin
                 addr_str = "0.0.0.0:0000"
             else:
+                next_ip, next_port, _ = route[i + 1]
                 addr_str = f"{next_ip}:{next_port}"
             addr_bytes = addr_str.ljust(ADDR_LEN).encode()
+            # On chiffre adresse suivante + couche interne
             layer = xor_layer(addr_bytes + layer, clef)
 
         # On renvoie le paquet et la route complète
