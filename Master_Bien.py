@@ -103,6 +103,15 @@ def monitor_routers():
             print("Erreur monitor_routers:", e)
         time.sleep(5)
 
+def clean_dynamic_tables():
+    """Nettoie les tables dynamiques au démarrage du master."""
+    try:
+        db_execute("DELETE FROM routeurs_dyn;")
+        db_execute("DELETE FROM clients_dyn;")
+        print("Tables routeurs_dyn et clients_dyn nettoyées.")
+    except Exception as e:
+        print("Erreur nettoyage BDD:", e)
+
 def client_handler(conn, addr):
     remote_ip, _remote_port = addr
     try:
@@ -134,6 +143,9 @@ def client_handler(conn, addr):
         conn.close()
 
 def main():
+    # Nettoyage BDD au démarrage
+    clean_dynamic_tables()
+
     # Thread de surveillance des routeurs
     t = threading.Thread(target=monitor_routers, daemon=True)
     t.start()
