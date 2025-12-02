@@ -1,5 +1,6 @@
 import socket
 import threading
+import time
 import mysql.connector
 
 DB_CFG = dict(
@@ -31,8 +32,8 @@ def handle_register_router(parts, remote_ip):
 
     # On utilise l'IP réelle de la connexion (remote_ip)
     db_execute(
-        "INSERT INTO routeurs_dyn (nom, ip, port, clef) VALUES (%s,%s,%s,%s)",
-        (nom, remote_ip, port, clef)
+        "INSERT INTO routeurs_dyn (nom, ip, port, clef, alive) VALUES (%s,%s,%s,%s,%s)",
+        (nom, remote_ip, port, clef, 0)
     )
     return "OK|ROUTER_REGISTERED"
 
@@ -46,7 +47,6 @@ def handle_register_client(parts, remote_ip):
     except ValueError:
         return "ERR|BAD_PORT"
 
-    # Si tu veux garder l'IP client dans une table, tu peux ajouter une colonne ip dans clients_dyn
     db_execute(
         "INSERT INTO clients_dyn (nom, port) VALUES (%s,%s)",
         (nom, port)
@@ -54,9 +54,9 @@ def handle_register_client(parts, remote_ip):
     return "OK|CLIENT_REGISTERED"
 
 def handle_ask_routers():
-    # On lit dans la table routeurs (statiques) pour les clés officielles
+    # On lit les routeurs dynamiques vivants
     rows = db_execute(
-        "SELECT nom, ip, port, clef FROM routeurs ORDER BY id",
+        "SELECT nom, ip, port, clef FROM routeurs_dyn WHERE alive=1 ORDER BY id",
         fetch=True
     )
     lines = ["ROUTERS"]
@@ -75,6 +75,33 @@ def handle_ask_clients():
         lines.append(f"{nom};{port}")
     lines.append("END")
     return "\n".join(lines)
+
+def ping_router(ip, port, timeout=1.0):
+    try:
+        with socket.socket() as s:
+            s.settimeout(timeout)
+            s.connect((ip, port))
+        return True
+    except OSError:
+        return False
+
+def monitor_routers():
+    """Thread qui surveille les routeurs_dyn et met à jour alive."""
+    while True:
+        try:
+            rows = db_execute(
+                "SELECT id, ip, port FROM routeurs_dyn",
+                fetch=True
+            )
+            for rid, ip, port in rows:
+                ok = ping_router(ip, int(port))
+                db_execute(
+                    "UPDATE routeurs_dyn SET alive=%s WHERE id=%s",
+                    (1 if ok else 0, rid)
+                )
+        except Exception as e:
+            print("Erreur monitor_routers:", e)
+        time.sleep(5)
 
 def client_handler(conn, addr):
     remote_ip, _remote_port = addr
@@ -107,6 +134,10 @@ def client_handler(conn, addr):
         conn.close()
 
 def main():
+    # Thread de surveillance des routeurs
+    t = threading.Thread(target=monitor_routers, daemon=True)
+    t.start()
+
     s = socket.socket()
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     # Pour plusieurs machines, remplace "localhost" par l'IP du master ou ''
