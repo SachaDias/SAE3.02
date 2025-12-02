@@ -27,6 +27,7 @@ def get_key_for_me(port):
     return res[0] if res else None
 
 def register_router(name, port, clef):
+    # Pour plusieurs machines, remplace "localhost" par l'IP réelle du routeur
     msg = f"REGISTER_ROUTER|{name}|localhost|{port}|{clef}"
     try:
         with socket.socket() as s:
@@ -51,18 +52,19 @@ def handle_conn(conn, key, name, my_port):
     print(f"Adresse suivante: '{addr_str}'")
 
     if addr_str == "0.0.0.0:0000":
-        # dernier routeur
+        # dernier routeur : payload = "IP_DEST:PORT_DEST:message"
         try:
             text = payload.decode(errors="replace")
-            port_str, msg = text.split(":", 1)
+            dest_ip, port_str, msg = text.split(":", 2)
             dest_port = int(port_str)
             with socket.socket() as s:
-                s.connect(("localhost", dest_port))
+                s.connect((dest_ip, dest_port))
                 s.sendall(msg.encode())
-            print(f">>> MESSAGE FINAL livré à {dest_port} : {msg}")
+            print(f">>> MESSAGE FINAL livré à {dest_ip}:{dest_port} : {msg}")
         except Exception as e:
             print("Erreur au dernier routeur:", e)
     else:
+        # routeur intermédiaire
         try:
             ip, port_str = addr_str.split(":", 1)
             next_port = int(port_str)
@@ -75,29 +77,4 @@ def handle_conn(conn, key, name, my_port):
 
     conn.close()
 
-def main(port, name):
-    key = get_key_for_me(port)
-    if not key:
-        print(f"Aucune clef pour le port {port} dans la table routeurs")
-        return
-
-    register_router(name, port, key)
-
-    s = socket.socket()
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    s.bind(("localhost", port))
-    s.listen()
-    print(f"Routeur {name} prêt sur {port}")
-
-    while True:
-        conn, _ = s.accept()
-        threading.Thread(
-            target=handle_conn,
-            args=(conn, key, name, port),
-            daemon=True
-        ).start()
-
-if __name__ == "__main__":
-    port = int(sys.argv[1])
-    name = sys.argv[2] if len(sys.argv) > 2 else f"R_{port}"
-    main(port, name)
+def main(port

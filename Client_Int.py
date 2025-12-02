@@ -21,23 +21,36 @@ class ClientGUI(QWidget):
         self.routers_dispos = []  # (nom, ip, port, clef)
 
         self.setWindowTitle(f"{local_name} (port {local_port})")
-        self.resize(550, 450)
+        self.resize(550, 480)
 
         layout = QVBoxLayout()
         self.info_label = QLabel(f"Client {local_name} sur port {local_port}")
         self.history = QTextEdit()
         self.history.setReadOnly(True)
+
+        # Route des routeurs
         self.route_line = QLineEdit()
         self.route_line.setPlaceholderText("Route (R1,R2,R3)")
+
         self.refresh_btn = QPushButton("Rafraîchir routeurs")
+
+        # Nouveau: IP destination
+        self.dest_ip_input = QLineEdit()
+        self.dest_ip_input.setPlaceholderText("IP destinataire (ex: 192.168.1.20)")
+
+        # Port destination
         self.target_input = QLineEdit()
         self.target_input.setPlaceholderText("Port destinataire (ex: 5300)")
+
         self.msg_input = QLineEdit()
         self.msg_input.setPlaceholderText("Votre message")
         self.send_btn = QPushButton("Envoyer")
 
-        for w in [self.info_label, self.history, self.route_line,
-                  self.refresh_btn, self.target_input, self.msg_input, self.send_btn]:
+        for w in [
+            self.info_label, self.history, self.route_line,
+            self.refresh_btn, self.dest_ip_input, self.target_input,
+            self.msg_input, self.send_btn
+        ]:
             layout.addWidget(w)
         self.setLayout(layout)
 
@@ -61,6 +74,7 @@ class ClientGUI(QWidget):
     def listen(self):
         s = socket.socket()
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Pour plusieurs machines, tu peux remplacer 'localhost' par '' ou l'IP locale
         s.bind(('localhost', self.local_port))
         s.listen(5)
         self.history.append("En attente de messages...")
@@ -98,7 +112,7 @@ class ClientGUI(QWidget):
         except Exception as e:
             self.history.append(f"Erreur ASK_ROUTERS : {e}")
 
-    def build_onion(self, dest_port, msg, route_names):
+    def build_onion(self, dest_ip, dest_port, msg, route_names):
         route = []
         for name in route_names:
             name = name.strip()
@@ -111,7 +125,8 @@ class ClientGUI(QWidget):
                 raise ValueError(f"Routeur {name} introuvable")
             route.append(ok)
 
-        inner = f"{dest_port}:{msg}".encode()
+        # Centre : "IP_DEST:PORT_DEST:message"
+        inner = f"{dest_ip}:{dest_port}:{msg}".encode()
         layer = inner
         for i in reversed(range(len(route))):
             ip, port, clef = route[i]
@@ -125,11 +140,13 @@ class ClientGUI(QWidget):
         return layer, route
 
     def send_message(self):
+        dest_ip = self.dest_ip_input.text().strip()
         dest_port = self.target_input.text().strip()
         msg = self.msg_input.text()
         route_spec = self.route_line.text().strip()
-        if not dest_port or not msg or not route_spec:
-            self.history.append("Remplir destinataire, message et route.")
+
+        if not dest_ip or not dest_port or not msg or not route_spec:
+            self.history.append("Remplir IP, port, message et route.")
             return
         try:
             int(dest_port)
@@ -138,7 +155,7 @@ class ClientGUI(QWidget):
             return
 
         try:
-            payload, route = self.build_onion(dest_port, msg, route_spec.split(","))
+            payload, route = self.build_onion(dest_ip, dest_port, msg, route_spec.split(","))
         except Exception as e:
             self.history.append(f"Erreur oignon : {e}")
             return
@@ -148,7 +165,7 @@ class ClientGUI(QWidget):
             with socket.socket() as s:
                 s.connect((first_ip, first_port))
                 s.sendall(payload)
-            self.history.append(f"Envoyé via {route_spec} vers {dest_port} : {msg}")
+            self.history.append(f"Envoyé via {route_spec} vers {dest_ip}:{dest_port} : {msg}")
             self.msg_input.clear()
         except Exception as e:
             self.history.append(f"Erreur envoi premier routeur : {e}")

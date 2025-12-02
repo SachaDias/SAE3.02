@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7ccd84b0-aa42-43cc-8bd3-03cb6d2bde40" name="Changes" comment="Changement route key">
-      <change beforePath="$PROJECT_DIR$/client_gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/client_gui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/master_gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/master_gui.py" afterDir="false" />
+    <list default="true" id="7ccd84b0-aa42-43cc-8bd3-03cb6d2bde40" name="Changes" comment="Changement de nom">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client_Int.py" beforeDir="false" afterPath="$PROJECT_DIR$/Client_Int.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Master_Bien.py" beforeDir="false" afterPath="$PROJECT_DIR$/Master_Bien.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routeur.py" beforeDir="false" afterPath="$PROJECT_DIR$/routeur.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -217,7 +218,47 @@
       <option name="project" value="LOCAL" />
       <updated>1764143367707</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Changement de tout les codes afin que les routeur se déclarent de manière dynamique au master er que les clients puissent lire cette route en interogeant la bdd">
+      <option name="closed" value="true" />
+      <created>1764146863920</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1764146863920</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Changement de tout les codes afin que les routeur se déclarent de manière dynamique au master et que les clients puissent lire cette route en interogeant la bdd">
+      <option name="closed" value="true" />
+      <created>1764147608300</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1764147608300</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Possibilité dé définir la route résolution de ,problème de routage">
+      <option name="closed" value="true" />
+      <created>1764150747302</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1764150747303</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Simplification et modification des codes afin d'assurer le respect des règles et bibliothèques de las ae">
+      <option name="closed" value="true" />
+      <created>1764162243577</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1764162243577</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Changement de nom">
+      <option name="closed" value="true" />
+      <created>1764162477306</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1764162477306</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -234,6 +275,11 @@
     <MESSAGE value="AJout d'un script permettant de configuré rapidement le nombre de routeur et leurs port dans la bdd" />
     <MESSAGE value="AJout d'une interface au script de modification de la bdd afin de facilité son utilisation" />
     <MESSAGE value="Changement route key" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changement route key" />
+    <MESSAGE value="Changement de tout les codes afin que les routeur se déclarent de manière dynamique au master er que les clients puissent lire cette route en interogeant la bdd" />
+    <MESSAGE value="Changement de tout les codes afin que les routeur se déclarent de manière dynamique au master et que les clients puissent lire cette route en interogeant la bdd" />
+    <MESSAGE value="Possibilité dé définir la route résolution de ,problème de routage" />
+    <MESSAGE value="Simplification et modification des codes afin d'assurer le respect des règles et bibliothèques de las ae" />
+    <MESSAGE value="Changement de nom" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changement de nom" />
   </component>
 </project>

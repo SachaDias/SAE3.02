@@ -19,22 +19,24 @@ def db_execute(query, params=(), fetch=False):
     conn.close()
     return rows
 
-def handle_register_router(parts):
-    # REGISTER_ROUTER|NOM|IP|PORT|CLEF
+def handle_register_router(parts, remote_ip):
+    # REGISTER_ROUTER|NOM|IP_DONNEE|PORT|CLEF
     if len(parts) != 5:
         return "ERR|REGISTER_ROUTER_FORMAT"
-    nom, ip, port_str, clef = parts[1], parts[2], parts[3], parts[4]
+    nom, _ip_ignored, port_str, clef = parts[1], parts[2], parts[3], parts[4]
     try:
         port = int(port_str)
     except ValueError:
         return "ERR|BAD_PORT"
+
+    # On utilise l'IP réelle de la connexion (remote_ip)
     db_execute(
         "INSERT INTO routeurs_dyn (nom, ip, port, clef) VALUES (%s,%s,%s,%s)",
-        (nom, ip, port, clef)
+        (nom, remote_ip, port, clef)
     )
     return "OK|ROUTER_REGISTERED"
 
-def handle_register_client(parts):
+def handle_register_client(parts, remote_ip):
     # REGISTER_CLIENT|NOM|PORT
     if len(parts) != 3:
         return "ERR|REGISTER_CLIENT_FORMAT"
@@ -43,6 +45,8 @@ def handle_register_client(parts):
         port = int(port_str)
     except ValueError:
         return "ERR|BAD_PORT"
+
+    # Si tu veux garder l'IP client dans une table, tu peux ajouter une colonne ip dans clients_dyn
     db_execute(
         "INSERT INTO clients_dyn (nom, port) VALUES (%s,%s)",
         (nom, port)
@@ -50,7 +54,11 @@ def handle_register_client(parts):
     return "OK|CLIENT_REGISTERED"
 
 def handle_ask_routers():
-    rows = db_execute("SELECT nom, ip, port, clef FROM routeurs ORDER BY id", fetch=True)
+    # On lit dans la table routeurs (statiques) pour les clés officielles
+    rows = db_execute(
+        "SELECT nom, ip, port, clef FROM routeurs ORDER BY id",
+        fetch=True
+    )
     lines = ["ROUTERS"]
     for nom, ip, port, clef in rows:
         lines.append(f"{nom};{ip};{port};{clef}")
@@ -58,14 +66,18 @@ def handle_ask_routers():
     return "\n".join(lines)
 
 def handle_ask_clients():
-    rows = db_execute("SELECT nom, port FROM clients_dyn ORDER BY id", fetch=True)
+    rows = db_execute(
+        "SELECT nom, port FROM clients_dyn ORDER BY id",
+        fetch=True
+    )
     lines = ["CLIENTS"]
     for nom, port in rows:
         lines.append(f"{nom};{port}")
     lines.append("END")
     return "\n".join(lines)
 
-def client_handler(conn):
+def client_handler(conn, addr):
+    remote_ip, _remote_port = addr
     try:
         data = conn.recv(4096)
         if not data:
@@ -75,9 +87,9 @@ def client_handler(conn):
         cmd = parts[0]
 
         if cmd == "REGISTER_ROUTER":
-            resp = handle_register_router(parts)
+            resp = handle_register_router(parts, remote_ip)
         elif cmd == "REGISTER_CLIENT":
-            resp = handle_register_client(parts)
+            resp = handle_register_client(parts, remote_ip)
         elif cmd == "ASK_ROUTERS":
             resp = handle_ask_routers()
         elif cmd == "ASK_CLIENTS":
@@ -86,18 +98,24 @@ def client_handler(conn):
             resp = "ERR|UNKNOWN_CMD"
 
         conn.sendall(resp.encode())
+    except Exception as e:
+        try:
+            conn.sendall(f"ERR|EXCEPTION|{e}".encode())
+        except Exception:
+            pass
     finally:
         conn.close()
 
 def main():
     s = socket.socket()
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    # Pour plusieurs machines, remplace "localhost" par l'IP du master ou ''
     s.bind(("localhost", 5100))
     s.listen(5)
     print("Master prêt sur 5100")
     while True:
-        conn, _ = s.accept()
-        threading.Thread(target=client_handler, args=(conn,), daemon=True).start()
+        conn, addr = s.accept()
+        threading.Thread(target=client_handler, args=(conn, addr), daemon=True).start()
 
 if __name__ == "__main__":
     main()
