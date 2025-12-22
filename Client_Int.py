@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import (
     QLineEdit, QPushButton, QLabel
 )
 
-MASTER_ADDR = ("localhost", 5100)
+MASTER_ADDR = ("192.168.1.64", 5100)
 ADDR_LEN = 21  # "ip:port" sur 21 octets
 
 def xor_layer(data, key_str):
@@ -74,8 +74,7 @@ class ClientGUI(QWidget):
     def listen(self):
         s = socket.socket()
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        # Pour plusieurs machines, tu peux remplacer 'localhost' par '' ou l'IP locale
-        s.bind(('localhost', self.local_port))
+        s.bind(("", self.local_port))
         s.listen(5)
         self.history.append("En attente de messages...")
         while True:

@@ -153,7 +153,7 @@ def main():
     s = socket.socket()
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     # Pour plusieurs machines, remplace "localhost" par l'IP du master ou ''
-    s.bind(("localhost", 5100))
+    s.bind(("192.168.1.64", 5100))
     s.listen(5)
     print("Master prêt sur 5100")
     while True:

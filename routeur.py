@@ -10,7 +10,7 @@ DB_CFG = dict(
     database='sae3'
 )
 
-MASTER_ADDR = ("localhost", 5100)
+MASTER_ADDR = ("192.168.1.64", 5100)
 ADDR_LEN = 21  # "ip:port" longueur fixe
 
 def get_key_for_me(port):
@@ -100,7 +100,7 @@ def main(port, name):
 
     s = socket.socket()
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    s.bind(("localhost", port))
+    s.bind(("", port))
     s.listen()
     print(f"Routeur {name} prêt sur {port}")
 
