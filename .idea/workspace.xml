@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7ccd84b0-aa42-43cc-8bd3-03cb6d2bde40" name="Changes" comment="Changement de nom">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client_Int.py" beforeDir="false" afterPath="$PROJECT_DIR$/Client_Int.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Master_Bien.py" beforeDir="false" afterPath="$PROJECT_DIR$/Master_Bien.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routeur.py" beforeDir="false" afterPath="$PROJECT_DIR$/routeur.py" afterDir="false" />
+    <list default="true" id="7ccd84b0-aa42-43cc-8bd3-03cb6d2bde40" name="Changes" comment="correction de bug rencontrée lors de test sur différente machine">
+      <change afterPath="$PROJECT_DIR$/readme.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/master.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scriptbdd.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -258,7 +258,47 @@
       <option name="project" value="LOCAL" />
       <updated>1764162477306</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Ajout de l'ip dans le protocole de routage et la bdd est maintenant géré par le master">
+      <option name="closed" value="true" />
+      <created>1764679859813</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1764679859813</updated>
+    </task>
+    <task id="LOCAL-00025" summary="ajout surveillance routeur">
+      <option name="closed" value="true" />
+      <created>1764680113653</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1764680113653</updated>
+    </task>
+    <task id="LOCAL-00026" summary="clean bdd à chaque lancement juste avant enregistrement des routeurs.">
+      <option name="closed" value="true" />
+      <created>1764680286740</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1764680286740</updated>
+    </task>
+    <task id="LOCAL-00027" summary="correction d'erreur lier à l'ajout de l'ip">
+      <option name="closed" value="true" />
+      <created>1766411030153</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1766411030153</updated>
+    </task>
+    <task id="LOCAL-00028" summary="correction de bug rencontrée lors de test sur différente machine">
+      <option name="closed" value="true" />
+      <created>1766414178526</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1766414178526</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -280,6 +320,11 @@
     <MESSAGE value="Possibilité dé définir la route résolution de ,problème de routage" />
     <MESSAGE value="Simplification et modification des codes afin d'assurer le respect des règles et bibliothèques de las ae" />
     <MESSAGE value="Changement de nom" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changement de nom" />
+    <MESSAGE value="Ajout de l'ip dans le protocole de routage et la bdd est maintenant géré par le master" />
+    <MESSAGE value="ajout surveillance routeur" />
+    <MESSAGE value="clean bdd à chaque lancement juste avant enregistrement des routeurs." />
+    <MESSAGE value="correction d'erreur lier à l'ajout de l'ip" />
+    <MESSAGE value="correction de bug rencontrée lors de test sur différente machine" />
+    <option name="LAST_COMMIT_MESSAGE" value="correction de bug rencontrée lors de test sur différente machine" />
   </component>
 </project>
