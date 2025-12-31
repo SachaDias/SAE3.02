@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7ccd84b0-aa42-43cc-8bd3-03cb6d2bde40" name="Changes" comment="ajout d'un read me expliquant la procèdure d'installation et suppresion des fichiers obsolètes.">
-      <change beforePath="$PROJECT_DIR$/Client_Int.py" beforeDir="false" afterPath="$PROJECT_DIR$/Client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Master_Bien.py" beforeDir="false" afterPath="$PROJECT_DIR$/Master.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Lien_Vidéo.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -304,7 +303,31 @@
       <option name="project" value="LOCAL" />
       <updated>1767114739597</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="ajout d'un read me expliquant la procèdure d'installation et suppresion des fichiers obsolètes.">
+      <option name="closed" value="true" />
+      <created>1767208290050</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1767208290050</updated>
+    </task>
+    <task id="LOCAL-00031" summary="ajout d'un read me expliquant la procèdure d'installation et suppresion des fichiers obsolètes.">
+      <option name="closed" value="true" />
+      <created>1767208411896</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1767208411896</updated>
+    </task>
+    <task id="LOCAL-00032" summary="ajout d'un read me expliquant la procèdure d'installation et suppresion des fichiers obsolètes.">
+      <option name="closed" value="true" />
+      <created>1767208470277</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1767208470277</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
