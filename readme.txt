@@ -74,7 +74,7 @@ FLUSH PRIVILEGES;
 
 Configuration des scripts
 
-3.1 master_gui.py
+3.1 master.py
 
 Rôle : serveur central + accès BDD + suivi des routeurs (alive) + réponses aux clients.
 
@@ -132,7 +132,7 @@ dest_port = int(port_str)
 s.connect((dest_ip, dest_port))
 
 
-3.3 client_gui.py
+3.3 client.py
 
 Rôle : client graphique PyQt (enregistrement, ASK_ROUTERS, construction oignon, réception).​
 
@@ -182,7 +182,7 @@ Client B : 192.168.1.18, port 5600
 Sur 192.168.1.64 :
 
 text
-python master_gui.py
+python master.py
 Afficher : "Master prêt sur 5100".
 
 4.2 Routeurs
@@ -211,11 +211,11 @@ R1 et R2 doivent être présents avec alive=1.
 Sur 192.168.1.64 :
 
 text
-python client_gui.py 5200 CLIENT_A
+python client.py 5200 CLIENT_A
 Sur 192.168.1.18 :
 
 text
-python client_gui.py 5600 CLIENT_B
+python client.py 5600 CLIENT_B
 Les deux doivent afficher "En attente de messages...".
 
 Envoi d’un message
