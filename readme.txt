@@ -62,7 +62,7 @@ CREATE TABLE clients_dyn (
     nom  VARCHAR(50) NOT NULL,
     port INT NOT NULL
 );
-​
+
 
 2.2 Utilisateur BDD
 
@@ -70,7 +70,7 @@ CREATE TABLE clients_dyn (
 CREATE USER 'saeuser'@'localhost' IDENTIFIED BY 'unmotdepassefiable';
 GRANT ALL PRIVILEGES ON sae3.* TO 'saeuser'@'localhost';
 FLUSH PRIVILEGES;
-​
+
 
 Configuration des scripts
 
