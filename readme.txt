@@ -29,14 +29,14 @@ MariaDB/MySQL installé en local.
 
 Installation typique :
 
-text
+
 python -m venv .venv
 source .venv/bin/activate   # ou .venv\Scripts\activate sous Windows
 pip install mysql-connector-python PyQt5
 2. Base de données MariaDB
 2.1 Création
 
-text
+
 CREATE DATABASE sae3 CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE sae3;
 
@@ -66,7 +66,7 @@ CREATE TABLE clients_dyn (
 
 2.2 Utilisateur BDD
 
-text
+
 CREATE USER 'saeuser'@'localhost' IDENTIFIED BY 'unmotdepassefiable';
 GRANT ALL PRIVILEGES ON sae3.* TO 'saeuser'@'localhost';
 FLUSH PRIVILEGES;
@@ -80,7 +80,7 @@ Rôle : serveur central + accès BDD + suivi des routeurs (alive) + réponses au
 
 Configurer l’accès BDD :
 
-text
+
 DB_CFG = dict(
     user='saeuser',
     password='unmotdepassefiable',
@@ -89,7 +89,7 @@ DB_CFG = dict(
 )
 Écoute réseau (toutes interfaces) :
 
-text
+
 s.bind(("", 5100))   # et non ("localhost", 5100)
 Le master :
 
@@ -105,7 +105,7 @@ Rôle : routeur virtuel (déchiffre une couche, décide du prochain saut, ou liv
 
 Config BDD et master :
 
-text
+
 DB_CFG = dict(
     user='saeuser',
     password='unmotdepassefiable',
@@ -116,17 +116,17 @@ DB_CFG = dict(
 MASTER_ADDR = ("IP_DU_MASTER", 5100)  # ex: ("192.168.1.64", 5100)
 Écoute sur toutes les interfaces :
 
-text
+
 s.bind(("", port))   # et non ("localhost", port)
 Enregistrement au master :
 
-text
+
 register_router(name, port, key)
 # envoie REGISTER_ROUTER|name|localhost|port|clef
 # le master remplace l’IP par remote_ip réel
 Dernier routeur (centre de l’oignon = "IP_DEST:PORT_DEST:message") :
 
-text
+
 dest_ip, port_str, msg = text.split(":", 2)
 dest_port = int(port_str)
 s.connect((dest_ip, dest_port))
@@ -138,11 +138,11 @@ Rôle : client graphique PyQt (enregistrement, ASK_ROUTERS, construction oignon,
 
 Adresse du master :
 
-text
+
 MASTER_ADDR = ("IP_DU_MASTER", 5100)
 Écoute sur toutes interfaces pour recevoir le message final :
 
-text
+
 def listen(self):
     s = socket.socket()
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -151,7 +151,7 @@ def listen(self):
     ...
 Centre de l’oignon :
 
-text
+
 inner = f"{dest_ip}:{dest_port}:{msg}".encode()
 Champs à saisir dans le client :
 
@@ -181,7 +181,7 @@ Client B : 192.168.1.18, port 5600
 
 Sur 192.168.1.64 :
 
-text
+
 python master.py
 Afficher : "Master prêt sur 5100".
 
@@ -189,11 +189,11 @@ Afficher : "Master prêt sur 5100".
 
 Sur 192.168.1.21 :
 
-text
+
 python routeur.py 5101 R1
 Sur 192.168.1.22 :
 
-text
+
 python routeur.py 5102 R2
 Afficher : "Routeur R? prêt sur ?".
 
@@ -201,7 +201,7 @@ Afficher : "Routeur R? prêt sur ?".
 
 Sur le master, dans MariaDB :
 
-text
+
 USE sae3;
 SELECT id, nom, ip, port, alive FROM routeurs_dyn;
 R1 et R2 doivent être présents avec alive=1.
@@ -210,11 +210,11 @@ R1 et R2 doivent être présents avec alive=1.
 
 Sur 192.168.1.64 :
 
-text
+
 python client.py 5200 CLIENT_A
 Sur 192.168.1.18 :
 
-text
+
 python client.py 5600 CLIENT_B
 Les deux doivent afficher "En attente de messages...".
 
